@@ -4,6 +4,7 @@ import random
 import pygame
 import os
 import config
+from itertools import permutations
 
 
 class BaseSprite(pygame.sprite.Sprite):
@@ -112,4 +113,41 @@ class ExampleAgent(Agent):
     def get_agent_path(self, coin_distance):
         path = [i for i in range(1, len(coin_distance))]
         random.shuffle(path)
+        return [0] + path + [0]
+
+class Aki(Agent):
+    def __init__(self, x, y, file_name):
+        super().__init__(x, y, file_name)
+
+    def get_agent_path(self, coin_distance):
+        return [0, 1, 2, 3, 4, 0]
+
+class Jocke(Agent):
+    def __init__(self, x, y, file_name):
+        super().__init__(x, y, file_name)
+
+    def get_agent_path(self, coin_distance):
+        if len(coin_distance) == 1:
+            return [0]
+
+        start_idx = 0
+        vertices = [i for i in range(1, len(coin_distance))]
+        path = []
+    
+        min_path_weight = math.inf
+        perms = permutations(vertices)
+        for i in perms:
+            current_path_weight = 0
+            current_path = []
+            k = start_idx
+            for j in i:
+                current_path_weight += coin_distance[k][j]
+                current_path.append(j)
+                k = j
+            current_path_weight += coin_distance[k][start_idx]
+    
+            if(current_path_weight < min_path_weight):
+                min_path_weight = current_path_weight
+                path = current_path
+            
         return [0] + path + [0]
