@@ -13,6 +13,27 @@ def find_next_coin_dfs(visit, paths):
 
         return next_coin
 
+class PartialPath:
+    def __init__(self, path, cost):
+        self.path = path
+        self.cost = cost
+
+    def __lt__(self, other):
+        if self.cost < other.cost:
+            return True
+        elif self.cost > other.cost:
+            return False
+        else:
+            if len(self.path) > len(other.path):
+                return True
+            elif len(self.path) < len(other.path):
+                return False
+            else:
+                if len(self.path) != 0 and len(other.path) != 0:
+                    return self.path[-1] < other.path[-1]
+                else:
+                    return False
+
 class Timeout(Exception):
     pass
 

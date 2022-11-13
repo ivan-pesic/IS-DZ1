@@ -5,6 +5,7 @@ import pygame
 import os
 import config
 from itertools import permutations
+from queue import PriorityQueue
 from util import *
 
 
@@ -175,6 +176,35 @@ class Uki(Agent):
         super().__init__(x, y, file_name)
 
     def get_agent_path(self, coin_distance):
-        path = [i for i in range(1, len(coin_distance))]
-        random.shuffle(path)
-        return [0] + path + [0]
+        # for i in range(len(coin_distance)):
+        #     for j in range(len(coin_distance)):
+        #         print(coin_distance[i][j], end=', ')
+        #     print('')
+        q = PriorityQueue()
+        curr_pp = PartialPath([0], 0)
+
+
+        counter = 0
+        num_of_nodes = len(coin_distance)
+
+        q.put(curr_pp)
+
+        while not q.empty():
+            curr_pp = q.get()
+            counter += 1
+            if len(curr_pp.path) == num_of_nodes + 1:
+                print(counter)
+                return curr_pp.path
+            
+            cost = curr_pp.cost
+            partial_path = curr_pp.path
+            last_node = curr_pp.path[-1]
+
+            for i in range(len(coin_distance)):
+                if i not in partial_path or (i in partial_path and i == 0 and len(partial_path) == num_of_nodes):
+                    new_partial_path = partial_path.copy()
+                    new_partial_path.append(i)
+                    new_cost = cost + coin_distance[last_node][i]
+                    pp = PartialPath(new_partial_path, new_cost)
+                    q.put(pp)
+
