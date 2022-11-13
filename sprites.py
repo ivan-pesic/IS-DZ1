@@ -137,7 +137,6 @@ class Aki(Agent):
             next = find_next_coin_dfs(visit, coin_distance[v])
             if next:
                 stack.append(next)
-
         
         return path + [0]
 
@@ -169,4 +168,13 @@ class Jocke(Agent):
                 min_path_weight = current_path_weight
                 path = current_path
             
+        return [0] + path + [0]
+
+class Uki(Agent):
+    def __init__(self, x, y, file_name):
+        super().__init__(x, y, file_name)
+
+    def get_agent_path(self, coin_distance):
+        path = [i for i in range(1, len(coin_distance))]
+        random.shuffle(path)
         return [0] + path + [0]
