@@ -1,7 +1,17 @@
 import ctypes
 import time
 from threading import Timer, Thread
+import math
 
+def find_next_coin_dfs(visit, paths):
+        min_path = math.inf
+        next_coin = None
+        for i in range(len(paths)):
+            if paths[i] != 0 and not visit[i] and paths[i] < min_path:
+                min_path = paths[i]
+                next_coin = i
+
+        return next_coin
 
 class Timeout(Exception):
     pass

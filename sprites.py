@@ -5,6 +5,7 @@ import pygame
 import os
 import config
 from itertools import permutations
+from util import *
 
 
 class BaseSprite(pygame.sprite.Sprite):
@@ -120,7 +121,25 @@ class Aki(Agent):
         super().__init__(x, y, file_name)
 
     def get_agent_path(self, coin_distance):
-        return [0, 1, 2, 3, 4, 0]
+        if len(coin_distance) == 1:
+            return [0]
+        
+        visit = [False for x in range(len(coin_distance))]
+        stack = []
+        path = []
+        start_idx = 0
+        
+        stack.append(start_idx)
+        while len(stack):
+            v = stack.pop()
+            visit[v] = True
+            path.append(v)
+            next = find_next_coin_dfs(visit, coin_distance[v])
+            if next:
+                stack.append(next)
+
+        
+        return path + [0]
 
 class Jocke(Agent):
     def __init__(self, x, y, file_name):
