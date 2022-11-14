@@ -210,8 +210,10 @@ class Micko(Agent):
 
     def get_agent_path(self, coin_distance):
         q = PriorityQueue()
-        curr_pp = PartialPathAStar([0], 0, calculate_heuristic(0, coin_distance))
-
+        initial_path = [0]
+        heuristic = calculate_heuristic(0, set(initial_path[1:-1]), coin_distance)
+        curr_pp = PartialPathAStar([0], heuristic, heuristic)
+        all_nodes_set = set([x for x in range(0, len(coin_distance))])
 
         counter = 0
         num_of_nodes = len(coin_distance)
@@ -233,9 +235,7 @@ class Micko(Agent):
                 if i not in partial_path or (i in partial_path and i == 0 and len(partial_path) == num_of_nodes):
                     new_partial_path = partial_path.copy()
                     new_partial_path.append(i)
-                    heuristic = 0 if i == 0 else calculate_heuristic(i, coin_distance)
+                    heuristic = calculate_heuristic(i, set(new_partial_path[1:-1]), coin_distance)
                     new_cost = cost + coin_distance[last_node][i] - curr_pp.heuristic + heuristic
                     pp = PartialPathAStar(new_partial_path, new_cost, heuristic)
                     q.put(pp)
-
-

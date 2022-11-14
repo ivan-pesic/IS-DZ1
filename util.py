@@ -21,15 +21,15 @@ def find_min(S1, S2, graph):
             if graph[i][j] < min_path:
                 u = i
                 v = j
+                min_path = graph[i][j]
 
     return u, v
 
-def calculate_heuristic(node, graph):
+def calculate_heuristic(node, rest, graph):
     U = set()
     U.add(node)
     heuristic = 0
-    V = set([x for x in range(len(graph))])
-    
+    V = set([x for x in range(len(graph))]) - rest
     while(U != V):
         u, v = find_min(U, V - U, graph)
         U.add(v)
