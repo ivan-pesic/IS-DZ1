@@ -13,10 +13,58 @@ def find_next_coin_dfs(visit, paths):
 
         return next_coin
 
+def find_min(S1, S2, graph):
+    min_path = math.inf
+    u = v = -1
+    for i in S1:
+        for j in S2:
+            if graph[i][j] < min_path:
+                u = i
+                v = j
+
+    return u, v
+
+def calculate_heuristic(node, graph):
+    U = set()
+    U.add(node)
+    heuristic = 0
+    V = set([x for x in range(len(graph))])
+    
+    while(U != V):
+        u, v = find_min(U, V - U, graph)
+        U.add(v)
+        heuristic += graph[u][v]
+
+    return heuristic
+
+
+
 class PartialPath:
     def __init__(self, path, cost):
         self.path = path
         self.cost = cost
+
+    def __lt__(self, other):
+        if self.cost < other.cost:
+            return True
+        elif self.cost > other.cost:
+            return False
+        else:
+            if len(self.path) > len(other.path):
+                return True
+            elif len(self.path) < len(other.path):
+                return False
+            else:
+                if len(self.path) != 0 and len(other.path) != 0:
+                    return self.path[-1] < other.path[-1]
+                else:
+                    return False
+
+class PartialPathAStar:
+    def __init__(self, path, cost, heuristic):
+        self.path = path
+        self.cost = cost
+        self.heuristic = heuristic
 
     def __lt__(self, other):
         if self.cost < other.cost:
