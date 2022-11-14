@@ -141,6 +141,7 @@ class Aki(Agent):
         
         return path + [0]
 
+
 class Jocke(Agent):
     def __init__(self, x, y, file_name):
         super().__init__(x, y, file_name)
@@ -171,6 +172,7 @@ class Jocke(Agent):
             
         return [0] + path + [0]
 
+
 class Uki(Agent):
     def __init__(self, x, y, file_name):
         super().__init__(x, y, file_name)
@@ -179,17 +181,13 @@ class Uki(Agent):
         q = PriorityQueue()
         curr_pp = PartialPath([0], 0)
 
-
-        counter = 0
         num_of_nodes = len(coin_distance)
 
         q.put(curr_pp)
 
         while not q.empty():
             curr_pp = q.get()
-            counter += 1
             if len(curr_pp.path) == num_of_nodes + 1:
-                print(counter)
                 return curr_pp.path
             
             cost = curr_pp.cost
@@ -204,6 +202,7 @@ class Uki(Agent):
                     pp = PartialPath(new_partial_path, new_cost)
                     q.put(pp)
 
+
 class Micko(Agent):
     def __init__(self, x, y, file_name):
         super().__init__(x, y, file_name)
@@ -215,16 +214,13 @@ class Micko(Agent):
         curr_pp = PartialPathAStar([0], heuristic, heuristic)
         all_nodes_set = set([x for x in range(0, len(coin_distance))])
 
-        counter = 0
         num_of_nodes = len(coin_distance)
 
         q.put(curr_pp)
 
         while not q.empty():
             curr_pp = q.get()
-            counter += 1
             if len(curr_pp.path) == num_of_nodes + 1:
-                print(counter)
                 return curr_pp.path
             
             cost = curr_pp.cost
